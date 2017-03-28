@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0">
+    <!--没做动态响应-->
+    <title>This is the login page</title>
+    <link rel="icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="css/login.css">
+    <style type="text/css">
+        #preview {
+            float: right;
+            width: 50px;
+            z-index: 100;
+            height: 50px;
+            margin-right: 27rem;
+            border: 1px solid transparent;
+            overflow: hidden;
+        }
+        input[type="file"] {
+            margin-left: 0px;
+            width: 150px;
+        }
+        #imghead {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);}
+    </style>
+</head>
+<body>
+<div>
+    <div id="header">
+        <div class="logo">
+
+        </div>
+        <div class="welcome">Welcome to register</div>
+    </div>
+    <div id="video_Area">
+        <video src="video/sky.mp4" class="vdo" loop autoplay muted poster="#"></video>
+    </div>
+    <!--next div is the register_ChkBox-->
+    <div id="container_register">
+        <form class="form_Chk" action="php/regcheck.php" method="POST" enctype="multipart/form-data">
+            <!--userName-->
+            <div class="group">
+                <label class="lab" for="username">用户名:</label>
+                <div class="text_Box">
+                    <input id="username" type="text" class="form-Style" autofocus placeholder="请输入用户名" required pattern="^[a-zA-Z0-9]{8,16}$" name="username">
+                </div>
+                <label id="usernameTip" class="tips hide"></label>
+            </div>
+            <!--pwd-->
+            <div class="group">
+                <label class="lab" for="password">密码:</label>
+                <div class="text_Box">
+                    <input id="password" type="password" class="form-Style"  placeholder="请输入注册密码" required pattern="^[a-zA-Z]\w{5,17}$" name="password">
+                </div>
+                <label id="passwordTip" class="tips hide "></label>
+            </div>
+            <!--checkpwd-->
+            <div class="group">
+                <label class="lab" for="checkPassword">确认密码:</label>
+                <div class="text_Box">
+                    <input id="checkPassword" type="password" class="form-Style"  placeholder="请再次输入注册密码" required pattern="^[a-zA-Z]\w{5,17}$" name="confirm">
+                </div>
+                <label id="checkPasswordTip" class="tips hide"></label>
+            </div>
+            <!--email-->
+            <div class="group">
+                <label class="lab" for="email">邮箱:</label>
+                <div class="text_Box">
+                    <input id="email" type="email" class="form-Style"  placeholder="请输入注册邮箱" required autocomplete="off" name="email">
+                </div>
+                <label id="emailTip" class="tips hide"></label>
+            </div>
+            <!--qq-->
+            <div class="group">
+                <label class="lab" for="qq">qq:</label>
+                <div class="text_Box">
+                    <input id="qq"  type="text" class="form-Style" placeholder="请输入QQ" name="qq" required pattern="^[1-9]\d{4,10}$" autocomplete="off">
+                </div>
+                <label id="qqTip" class="tips hide"></label>
+            </div>
+
+
+            <!--gender-->
+            <div class="group">
+                <label  class="lab">性别:</label>
+                <div class="text_Box" style="padding-top: 15px">
+                    <!--<input type="radio" name="sex" value="male" checked id="gender">Male-->
+                    <!--<input type="radio" name="sex" value="female" >Female-->
+                    <label for="Male"  style="font-size: 16px;font-weight: bold">
+                        <input type="radio" name='gender' id="Male" value="Male"/>
+                        Male
+                    </label>
+                    <label for="Female"  style="font-size: 16px;font-weight: bold">
+                        <input type="radio"  name="gender" id="Female" value="Female"/>
+                        Female
+                    </label>
+                </div>
+            </div>
+            <!--headicon-->
+            <div id="preview">
+                <img id="imghead" border=0 src="img/head_org.jpg" width="50" height="50" />
+            </div>
+            <p style="font-size: 15px;margin-left: 10px;">上传头像(限制100k)：<input type="file" name="file" onchange="previewImage(this)" ></p>
+            <!--check_Code-->
+
+            <div id="chk_Code">
+                <b>请输入验证码:</b>
+                <input type="text" id ="chkCode" class ="txtVerification" name="chkcode" autocomplete="off">
+                <img src="checkcode.php" alt="" id="checkpic" onclick="changing();" style="margin-bottom: -10px; width: 60px; cursor:pointer">
+            </div>
+            <!--The signal icon after checked-->
+            <div id='tip_img'></div>
+            <!--The signal text after checked-->
+            <div id="aft_Chk"></div>
+            <!--submit-->
+            <div id="btn">
+                <input type="submit" class="btn_sub" id="chk_Btn" value="注册" name="Submit"/>
+                <input type="submit" class="btn_sub " id="chk_Btn1" value="登陆" onclick="openlogin()" style="background: #fe8800"/>
+
+            </div>
+        </form>
+        <div id="footer">
+            <a href="#">版权所有&copy</a>
+        </div>
+    </div>
+
+
+</div>
+<!--JS files-->
+<script src="js/jquery-1.11.3.js"></script>
+<script src="js/jquery-1.12.3.min.js"></script>
+<!--<script src="js/jquery.idcode.js"></script>-->
+<script src="js/login.js"></script>
+<!--verification-->
+<script>
+    var date=new Date();
+    function changing(){
+        document.getElementById('checkpic').src="checkcode.php?date="+date;
+    }
+</script>
+<script>
+   function openlogin() {
+       window.open('login.html','_self');
+   }
+</script>
+<script>
+    function previewImage(file)
+    {
+        var MAXWIDTH  = 50;
+        var MAXHEIGHT = 50;
+        var div = document.getElementById('preview');
+        if (file.files && file.files[0])
+        {
+            div.innerHTML ='<img id=imghead>';
+            var img = document.getElementById('imghead');
+            img.onload = function(){
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                img.width  =  rect.width;
+                img.height =  rect.height;
+//                 img.style.marginLeft = rect.left+'px';
+                img.style.marginTop = rect.top+'px';
+            }
+            var reader = new FileReader();
+            reader.onload = function(evt){img.src = evt.target.result;}
+            reader.readAsDataURL(file.files[0]);
+        }
+        else //兼容IE
+        {
+            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+            file.select();
+            var src = document.selection.createRange().text;
+            div.innerHTML = '<img id=imghead>';
+            var img = document.getElementById('imghead');
+            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
+            div.innerHTML = "<div id=divhead style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
+        }
+    }
+    function clacImgZoomParam( maxWidth, maxHeight, width, height ){
+        var param = {top:0, left:0, width:width, height:height};
+        if( width>maxWidth || height>maxHeight )
+        {
+            rateWidth = width / maxWidth;
+            rateHeight = height / maxHeight;
+
+            if( rateWidth > rateHeight )
+            {
+                param.width =  maxWidth;
+                param.height = Math.round(height / rateWidth);
+            }else
+            {
+                param.width = Math.round(width / rateHeight);
+                param.height = maxHeight;
+            }
+        }
+
+        param.left = Math.round((maxWidth - param.width) / 2);
+        param.top = Math.round((maxHeight - param.height) / 2);
+        return param;
+    }
+</script>
+
+
+</body>
+</html>
