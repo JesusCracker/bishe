@@ -1,0 +1,33 @@
+<div class="ng-annotate-text-popup-group">
+	<label class="ng-annotate-text-popup-label" for="ng-annotate-text-edit-comment">评论</label>
+	<textarea
+			id="ng-annotate-text-edit-comment"
+			class="ng-annotate-text-popup-field"
+			ng-model="$annotation.data.comment"
+			ng-disabled="$readonly">
+	</textarea>
+</div>
+
+<div class="ng-annotate-text-popup-group" ng-if="!$readonly">
+	<div class="ng-annotate-text-popup-label">颜色</div>
+	<ul class="ng-annotate-text-popup-colors">
+		<li ng-repeat="color in annotationColours">
+			<button
+					class="ng-annotate-text-swatch ng-annotate-text-swatch-color"
+					title="{{color.name}}"
+					ng-click="useColor(color)"
+					ng-class="[
+						'ng-annotate-text-type-' + color.value,
+						 isActiveColor(color) ? 'ng-annotate-text-swatch-active' : ''
+					]">
+				{{color.name}}
+			</button>
+		</li>
+	</ul>
+</div>
+
+<div class="ng-annotate-text-popup-actions" ng-if="!$readonly">
+	<button class="ng-annotate-text-btn ng-annotate-text-btn-save" ng-click="close()">保存</button>
+	<button class="ng-annotate-text-btn ng-annotate-text-btn-cancel" ng-click="reject()" ng-show="$isNew">取消</button>
+	<button class="ng-annotate-text-btn ng-annotate-text-btn-delete" ng-click="reject()" ng-show="!$isNew">删除</button>
+</div>
