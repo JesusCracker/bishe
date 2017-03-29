@@ -21,13 +21,27 @@ session_start();
           <li class="layui-nav-item layui-this" id="mainpage">
             <a href="javascript:void(0)" >首页</a>
           </li>
-          <li class="layui-nav-item">
-            <a href="javascript:void(0)">全部文件</a>
-          </li>
-
-          <li class="layui-nav-item">
-            <a href="javascript:void(0)">我的文件</a>
-          </li>
+            <?php
+                if(isset($_SESSION['all_managers']['username'])){
+                    echo '<li class="layui-nav-item">
+                          <a href="javascript:void(0)">全部文件</a>
+                          </li>';
+                }
+            ?>
+            <?php
+                if(isset($_SESSION['all']['username'])){
+                    echo' <li class="layui-nav-item">
+                          <a href="javascript:void(0)">我的文件</a>
+                          </li>';
+                }
+            ?>
+            <?php
+                if(empty($_SESSION['all']['username'])&&empty($_SESSION['all_managers']['username'])){
+                    echo' <li class="layui-nav-item">
+                          <a href="javascript:void(0)">请登录后再尝试</a>
+                          </li>';
+                }
+            ?>
         </ul>
         <div class="top_admin_user">
           <a class="update_cache" href="javascript:void(0)">更新缓存</a>|<a href="/" target="_blank">
@@ -77,7 +91,10 @@ session_start();
                 </a>
               </li>
             </ul>
-            <ul class="layui-nav layui-nav-tree left_menu_ul content_put_manage hide">
+
+            <?php
+                if(isset($_SESSION['all_managers']['username'])){
+                    echo '<ul class="layui-nav layui-nav-tree left_menu_ul content_put_manage hide">
               <li class="layui-nav-item layui-nav-title">
                 <a>全部文件</a>
               </li>
@@ -94,14 +111,18 @@ session_start();
                 </a>
               </li>
               <li class="layui-nav-item">
-                <a href="./feedback_list.html" target="main">
+                <a href="feedback_list.php" target="main">
                   <i class="layui-icon">&#xe63a;</i>
                   <cite>文件详情管理</cite>
                 </a>
               </li>
-            </ul>
+            </ul>';
+                }
+            ?>
 
-          <ul class="layui-nav layui-nav-tree left_menu_ul content_put_manage hide">
+            <?php
+             if(isset($_SESSION['all']['username'])){
+                echo '<ul class="layui-nav layui-nav-tree left_menu_ul content_put_manage hide">
             <li class="layui-nav-item layui-nav-title">
               <a>我的文件</a>
             </li>
@@ -118,12 +139,20 @@ session_start();
               </a>
             </li>
             <li class="layui-nav-item">
-              <a href="./feedback_list.html" target="main">
+              <a href="feedback_list.php" target="main">
                 <i class="layui-icon">&#xe63a;</i>
                 <cite>我的文件详情管理</cite>
               </a>
             </li>
-          </ul>
+          </ul>';
+             }
+            ?>
+            <?php
+                if(empty($_SESSION['all']['username'])&&empty($_SESSION['all_managers']['username'])){
+                    echo "<script>alert('请登录后再试！'); history.go(-1);</script>";
+                }
+            ?>
+
     			<div class="content_manage_container left_menu_ul hide">
     				<div class="content_manage_title">内容管理</div>
         		<div id="content_manage_tree"></div>

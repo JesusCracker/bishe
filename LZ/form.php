@@ -33,14 +33,44 @@
 	}
 
 	.txtbox {
-		height: 200px;
-		margin: 0 auto;
-		position: relative;
-		border: 1px solid #e43;
+		width: 800px;
 	}
 
 </style>
+<?php
+session_start();
+?>
+<?php
+    if(isset($_SESSION['files']['filename'])){
+        $name=(string)$_SESSION['files']['filename'];
+        $conn=mysqli_connect('localhost','root','','bishe');
+        $sql="SET NAMES UTF8";
+        if (!$conn) {
+            die("Connection failed: " .mysqli_connect_error());
+        }
+        mysqli_query($conn,$sql);
+        $sql = "SELECT * FROM text WHERE name='$name'";
+        $result = mysqli_query($conn,$sql);
+        $num = mysqli_num_rows($result);
+        if($num){
+            $all=mysqli_fetch_array($result);
+//            print_r($all['content']);
+            $content=$all['content'];
+          // $content=json_encode($content);
 
+        }
+       else{
+            echo ("<script>alert('数据库查询失败');</script>");
+       }
+       // print_r($content);
+
+    }else{
+        echo ("<script>alert('获取文件名失败');</script>");
+    }
+?>
+<script>
+    var content=<?php echo json_encode($content);?>;
+</script>
 <body>
 	<div class="layui-tab layui-tab-brief main-tab-container">
 		<ul class="layui-tab-title main-tab-title">
@@ -54,10 +84,15 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">文件名</label>
 						<div class="layui-input-inline input-custom-width">
-							<?php
-                session_start();
-                ?>
-								<input type="text" name="title" value=<?php echo $_SESSION[ 'files'][ 'filename']?> lay-verify="required" autocomplete="off"
+								<input type="text" name="title" value=
+                                <?php
+                                if(isset($_SESSION['files']['filename'])){
+								    echo $_SESSION[ 'files'][ 'filename'];
+								}
+								else{
+                                    echo'获取文件名失败,请重新上传';
+                                }
+                                ?> lay-verify="required" autocomplete="off"
 								placeholder="请输入标题" class="layui-input">
 						</div>
 					</div>
@@ -84,15 +119,25 @@
 					<div class="layui-form-item" ng-app="app" ng-controller="MainController">
 						<label class="layui-form-label">标注文本框</label>
 						<div class="layui-input-inline input-custom-width">
-							<div class="txtbox" ng-repeat="text in demoTexts">
+                            <?php
+                                if(isset($_SESSION['files']['filename'])){
+
+                                    echo'<div class="txtbox" ng-repeat="text in demoTexts">
 								<div>
-									<ng-annotate-text readonly="false" popup-controller="'AnnotationController'" popup-template-url="'partials/annotation.html'"
-									tooltip-controller="'AnnotationController'" tooltip-template-url="'partials/annotation-tooltip.html'" annotations="annotations[$index]"
+									<ng-annotate-text readonly="false" popup-controller="\'AnnotationController\'" popup-template-url="\'partials/annotation.html\'"
+									tooltip-controller="\'AnnotationController\'" tooltip-template-url="\'partials/annotation-tooltip.html\'" annotations="annotations[$index]"
 									on-annotate="onAnnotate" on-annotate-error="onAnnotateError" on-popup-show="onPopupShow" text="text">
 									</ng-annotate-text>
 								</div>
-							</div>
+							</div>';
+                                }
+                                else{
+                                    echo '获取文件内容失败，请重新上传';
+                                }
+                            ?>
+
 						</div>
+
 					</div>
 
 					<div class="layui-form-item">
@@ -166,6 +211,7 @@
     <script type="text/javascript" src="./js/angular.js"></script>
     <script type="text/javascript" src="./js/ng-annotate.min.js"></script>
     <script type="text/javascript" src="./js/main.min.js"></script>
+
 </body>
 
 </html>

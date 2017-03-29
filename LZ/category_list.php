@@ -37,7 +37,12 @@
               // Session需要先启动。
               session_start();
               if(isset($_SESSION['all']['username'])||isset($_SESSION['all_managers']['username'])){
-              $username=$_SESSION['all']['username'];
+                  if(isset($_SESSION['all']['username'])){
+                      $username=$_SESSION['all']['username'];
+                  }
+                  if(isset($_SESSION['all_managers']['username'])){
+                      $managename=$_SESSION['all_managers']['username'];
+                  }
               //连接数据库
               //  $conn = new mysqli($servername, $username, $password, $dbname);
               $conn=mysqli_connect('localhost','root','','bishe');
@@ -46,11 +51,16 @@
                   die("Connection failed: " .mysqli_connect_error());
               }
               mysqli_query($conn,$sql);
-              //权限判断还没做
-              $sql = "SELECT * FROM text WHERE username=$username ";
+              //权限判断
+               if(isset($username)){
+                   $sql = "SELECT * FROM text WHERE uername='$username'";
+                  }
+               if(isset($managename)){
+                    $sql="SELECT * FROM text WHERE 1";
+               }
+
               $result = mysqli_query($conn,$sql);
               $num = mysqli_num_rows($result);
-
               if($num){
                   while( $row = mysqli_fetch_assoc($result) ) {
                       //$uploadtime=date($row['uploadtime']);
